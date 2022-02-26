@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "author": "yakai911",
   "scripts": {
     "dev": "webpack serve --open",
     "build": "webpack --config webpack.config.js"

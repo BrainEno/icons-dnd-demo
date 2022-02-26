@@ -1,12 +1,12 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { hot } from 'react-hot-loader';
-import { Item } from './components/Item';
+import DndItem from './components/DndItem';
 import './styles/app.css';
-import { useLongPress } from './hooks/useLongPress';
+import useLongPress from './hooks/useLongPress';
 import useClickoutside from './hooks/useClickoutside';
 
 const initialArr: number[] = [];
-
+//生成fake data
 for (let i = 0; i < 66; i++) {
   initialArr.push(i + 1);
 }
@@ -24,17 +24,20 @@ function App() {
 
   const handleDelete =
     (num: number) => (event: React.MouseEvent<HTMLDivElement>) => {
+      //阻止冒泡以避免父级div的onClick事件被触发
       event.stopPropagation();
       setItems(() => items.filter((n) => n !== num));
       setEditing(false);
     };
 
+  //结束编辑状态
   const finishEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setEditing(false);
   };
 
   const handleLongPress = () => {
+    //长按触发编辑状态
     setEditing(true);
   };
 
@@ -46,7 +49,7 @@ function App() {
     e: React.DragEvent<HTMLDivElement>,
     from: number
   ) => {
-    console.log('drag start');
+    //拖拽开始
     dragItem.current = from;
     dragNode.current = e.currentTarget;
 
@@ -57,22 +60,22 @@ function App() {
   };
 
   const handleDragEnd = () => {
-    console.log('ending drag');
+    //设置拖拽状态结束
     setDragging(false);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>, to: number) => {
     //防止出现残影
     e.preventDefault();
-    console.log('drag over');
+
     //如果是同一个元素，则不处理
     if (dragItem.current === to) {
       return;
     }
 
     const currnetItem = dragItem.current;
+    //判断拖拽的不是同一个元素
     if (e.currentTarget !== dragNode.current) {
-      console.log('Target is not same as dragNode');
       setItems((prev: number[]) => {
         let newItems = JSON.parse(JSON.stringify(prev));
         let currentIndex = newItems.indexOf(currnetItem);
@@ -119,12 +122,11 @@ function App() {
         {items
           .slice(page * pageSize, (page + 1) * pageSize)
           .map((n: number, ind: number) => (
-            <Item
+            <DndItem
               extraClassName={getClassName(n)}
               key={n}
               text={n.toString()}
               editing={editing}
-              handleClick={(e) => e.preventDefault()}
               handleDelete={handleDelete(n)}
               onLongPress={onLongPress}
               draggable={editing} //只有触发抖动时才可以拖拽
@@ -144,7 +146,7 @@ function App() {
         </button>
         <div>
           <label className='label' htmlFor='pageSize'>
-            跳转到
+            每页数量
             <input
               className='page-input'
               name='pageSize'
@@ -152,7 +154,7 @@ function App() {
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
             />
-            页
+            个
           </label>
         </div>
         <button className='btn' onClick={nextPage}>

@@ -58,9 +58,9 @@ function getCurrentPosition<Target>(
   return null;
 }
 
-export function useLongPress<Target = Element>(
+function useLongPress<Target = Element>(
   callback: LongPressCallback<Target>,
-  delay = 400
+  delay = 400 //设置长按默认延迟为400ms
 ): LongPressResult<Target> | {} {
   const isLongPressing = useRef(false);
   const isPressed = useRef(false);
@@ -97,7 +97,6 @@ export function useLongPress<Target = Element>(
     }
 
     startPosition.current = null;
-
     isLongPressing.current = false;
     isPressed.current = false;
     timer.current !== undefined && clearTimeout(timer.current);
@@ -125,7 +124,7 @@ export function useLongPress<Target = Element>(
     [isPressed, isLongPressing]
   );
 
-  //如果存在timer，则清除
+  //如果已存在timer，则清除
   useEffect(() => {
     return () => {
       timer.current !== undefined && clearTimeout(timer.current);
@@ -150,3 +149,5 @@ export function useLongPress<Target = Element>(
     onTouchEnd: cancel,
   };
 }
+
+export default useLongPress;

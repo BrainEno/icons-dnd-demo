@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LongPressResult } from '../hooks/useLongPress';
 
-interface ItemProps {
+interface DndItemProps {
   text: string;
   editing: boolean;
   draggable: boolean;
   dataIndex: number;
   extraClassName?: string;
   handleDelete: React.MouseEventHandler<HTMLDivElement>;
-  handleClick: React.MouseEventHandler<HTMLDivElement>;
   handleDrag: React.DragEventHandler<HTMLDivElement>;
   handleDragStart: React.DragEventHandler<HTMLDivElement>;
   handleDragEnd: React.DragEventHandler<HTMLDivElement>;
@@ -16,14 +15,13 @@ interface ItemProps {
   onLongPress: LongPressResult<HTMLDivElement> | {};
 }
 
-export const Item: React.FC<ItemProps> = ({
+const DndItem: React.FC<DndItemProps> = ({
   text,
   editing,
   draggable,
   dataIndex,
   extraClassName,
   handleDelete,
-  handleClick,
   handleDragStart,
   handleDrag,
   handleDragEnd,
@@ -34,7 +32,6 @@ export const Item: React.FC<ItemProps> = ({
     <div
       draggable={draggable}
       className={`${extraClassName} ${editing && 'shake'}`}
-      onClick={handleClick}
       onDragStart={handleDragStart}
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
@@ -50,3 +47,5 @@ export const Item: React.FC<ItemProps> = ({
     </div>
   );
 };
+
+export default DndItem;
