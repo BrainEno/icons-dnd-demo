@@ -1,22 +1,48 @@
 import React, { useState } from 'react';
+import { LongPressResult } from '../hooks/useLongPress';
 
 interface ItemProps {
   text: string;
-  preparing: boolean;
+  editing: boolean;
+  draggable: boolean;
+  dataIndex: number;
+  extraClassName?: string;
   handleDelete: React.MouseEventHandler<HTMLDivElement>;
-  handleLongPress: () => void;
+  handleClick: React.MouseEventHandler<HTMLDivElement>;
+  handleDrag: React.DragEventHandler<HTMLDivElement>;
+  handleDragStart: React.DragEventHandler<HTMLDivElement>;
+  handleDragEnd: React.DragEventHandler<HTMLDivElement>;
+  handleDragOver: React.DragEventHandler<HTMLDivElement>;
+  onLongPress: LongPressResult<HTMLDivElement> | {};
 }
 
 export const Item: React.FC<ItemProps> = ({
   text,
-  preparing,
+  editing,
+  draggable,
+  dataIndex,
+  extraClassName,
   handleDelete,
-  handleLongPress,
+  handleClick,
+  handleDragStart,
+  handleDrag,
+  handleDragEnd,
+  handleDragOver,
+  onLongPress,
 }) => {
   return (
-    <div className={`item ${preparing && 'shake'}`} onClick={handleLongPress}>
+    <div
+      draggable={draggable}
+      className={`${extraClassName} ${editing && 'shake'}`}
+      onClick={handleClick}
+      onDragStart={handleDragStart}
+      onDrag={handleDrag}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
+      data-index={dataIndex}
+      {...onLongPress}>
       <div>{text}</div>
-      {preparing && (
+      {editing && (
         <div className='x' onClick={handleDelete}>
           &times;
         </div>
